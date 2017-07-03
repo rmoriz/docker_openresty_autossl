@@ -1,5 +1,6 @@
 FROM openresty/openresty:alpine-fat
 
+ARG LUA_RESTY_AUTO_SSL_VERSION="0.11.0"
 RUN apk add \
       --no-cache --virtual runtime \
       bash \
@@ -13,10 +14,9 @@ RUN apk add \
       # "-U" support in our tests), the /usr/bin version that symlinks BusyBox's
       # more limited pkill version takes precedence. So manually remove this
       # BusyBox symlink to the full pkill version is used.
-      if [ -L /usr/bin/pkill ]; then rm /usr/bin/pkill; fi
-
-RUN luarocks install lua-resty-http \
-    && luarocks install lua-resty-auto-ssl 0.11.0 \
+      if [ -L /usr/bin/pkill ]; then rm /usr/bin/pkill; fi \
+    && luarocks install lua-resty-http \
+    && luarocks install lua-resty-auto-ssl $LUA_RESTY_AUTO_SSL_VERSION \
     && addgroup -S nginx \
     && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
     && mkdir -p /certificates \
@@ -28,6 +28,8 @@ RUN luarocks install lua-resty-http \
     && ln -s /usr/local/openresty/nginx /etc \
     && ln -s /usr/local/openresty/nginx/logs/ /var/log/nginx
 
+USER nginx
+
 # customized nginx.conf based on nginx's image default
 # and lua-resty-auto-ssl example:
 #
@@ -38,6 +40,6 @@ COPY auto-ssl.conf /usr/local/openresty/nginx/conf/auto-ssl.conf
 #
 COPY nginx.vh.default.conf /usr/local/openresty/nginx/conf.d/default.conf
 
-RUN chown -R nginx:nginx /certificates
+USER root
 
 ENTRYPOINT ["/usr/local/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
