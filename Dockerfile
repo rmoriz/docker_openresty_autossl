@@ -24,6 +24,7 @@ RUN apk add \
        -subj '/CN=sni-support-required-for-valid-ssl' \
        -keyout /certificates/resty-auto-ssl-fallback.key \
        -out /certificates/resty-auto-ssl-fallback.crt \
+    && chown -R nginx:nginx /certificates \   
     && mkdir -p /usr/local/openresty/nginx/conf.d \
     && ln -s /usr/local/openresty/nginx /etc \
     && ln -s /usr/local/openresty/nginx/logs/ /var/log/nginx
@@ -39,6 +40,8 @@ COPY auto-ssl.conf /usr/local/openresty/nginx/conf/auto-ssl.conf
 # vhost default as defined in the nginx docker container
 #
 COPY nginx.vh.default.conf /usr/local/openresty/nginx/conf.d/default.conf
+
+VOLUME /certificates /usr/local/openresty/nginx
 
 USER root
 
