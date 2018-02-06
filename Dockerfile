@@ -25,8 +25,6 @@ RUN apk add \
        -keyout /certificates/resty-auto-ssl-fallback.key \
        -out /certificates/resty-auto-ssl-fallback.crt \
     && chown -R nginx:nginx /certificates \
-    && mkdir -p /usr/local/openresty/nginx/conf.d \
-    && ln -s /usr/local/openresty/nginx /etc \
     && ln -s /usr/local/openresty/nginx/logs/ /var/log/nginx
 
 USER nginx
