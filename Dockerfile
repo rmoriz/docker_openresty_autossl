@@ -1,6 +1,6 @@
 FROM openresty/openresty:alpine-fat
 
-ARG LUA_RESTY_AUTO_SSL_VERSION="0.11.0"
+ARG LUA_RESTY_AUTO_SSL_VERSION="0.12.0"
 RUN apk add \
       --no-cache --virtual runtime \
       bash \
@@ -24,7 +24,7 @@ RUN apk add \
        -subj '/CN=sni-support-required-for-valid-ssl' \
        -keyout /certificates/resty-auto-ssl-fallback.key \
        -out /certificates/resty-auto-ssl-fallback.crt \
-    && chown -R nginx:nginx /certificates \   
+    && chown -R nginx:nginx /certificates \
     && mkdir -p /usr/local/openresty/nginx/conf.d \
     && ln -s /usr/local/openresty/nginx /etc \
     && ln -s /usr/local/openresty/nginx/logs/ /var/log/nginx
