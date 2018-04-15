@@ -15,7 +15,14 @@ TODO, sorry
 
 ```shell
 docker pull rmoriz/openresty_autossl
-docker run -d -p 80:80 -p 443:443 rmoriz/openresty_autossl
+
+docker run \
+  -d \
+  -p 80:80 \
+  -p 443:443 \
+  -v certificates:/certificates \
+  -v nginx-config:/usr/local/openresty/nginx/conf \
+  rmoriz/openresty_autossl
 ```
 
 # Thanks!
