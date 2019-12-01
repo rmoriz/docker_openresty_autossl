@@ -1,6 +1,6 @@
 FROM openresty/openresty:alpine-fat
 
-ARG LUA_RESTY_AUTO_SSL_VERSION="0.12.0"
+ARG LUA_RESTY_AUTO_SSL_VERSION="0.13.1"
 RUN apk add \
       --no-cache --virtual runtime \
       bash \
